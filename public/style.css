@@ -1,9 +1,50 @@
-h1{
-    color: red;
+.header {
+    background-image: url(http://longwallpapers.com/Desktop-Wallpaper/marvel-avengers-wallpapers-high-definition-For-Desktop-Wallpaper.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position-y: 6%;
+    color: gold;
+    text-align: center;
 }
-div{
-    color: blue;
+.header h1 {
+    padding: 7% 0px 15% 0px;
 }
-ul {
-    color: darkgreen;
+.new-recruit-section {
+    padding-top: 3%;
+    font-family: fantasy;
+}
+.section-heading,.section-sub-title{
+    text-align: center;
+}
+.avengers-list-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.card {
+    width: 17%;
+    margin-bottom: 4%;
+    margin: 0 4% 4%;
+}
+.jumbotron {
+    background-color: gold;
+    width: 40%;
+    margin: 0 auto;
+    margin-bottom: 5rem;
+    text-align: center;
+    padding: 1rem 0 0 0;
+    margin-top: 3rem;
+}
+.jumbotron h4 {
+    font-size: 2.5rem;
+}
+footer {
+    background-image: url('https://www.hdwallpaper.nu/wp-content/uploads/2017/07/thor-1.jpg');
+    color: gold;
+    height: 1000px;
+}
+footer h4{
+    font-size: 4rem;
+    padding-top: 400px;
+    text-align: center;
 }

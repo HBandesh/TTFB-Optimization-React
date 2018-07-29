@@ -1,15 +1,17 @@
-import React, { Fragment } from "react";
+import React from "react";
 import {Header} from './header'
 import {MainContent} from './mainContent';
 import {Footer} from './footer';
+import {Navigation} from './navigation';
 
-class App extends React.Component {
-	render() {
-		return <Fragment>
+const App = ({data}) => {
+	return (
+		<React.Fragment>
 			<Header />
-			<MainContent data = {this.props.content} />
+			<Navigation data={data.navigationList}/>
+			<MainContent data = {data.mainContent} />
 			<Footer />
-		</Fragment> 
-	}
+		</React.Fragment>
+	);
 }
 export default App;
