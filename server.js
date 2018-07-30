@@ -9,64 +9,67 @@ import {Navigation} from './app/components/navigation';
 import request from 'superagent';
 
 
-const port = process.env.PORT || 8080 ,
+const port = process.env.PORT || 9090 ,
 server = express();
 
 let globalData = {};
 
 server.use(express.static('./public'));
 
-var getHead = (req,res,next) => {
-	res.set({
-		'Content-Type': 'text/html; charset=UTF-8', //This is done to overcome the issue of minimum number of bytes needed to render the DOM in firefox.
-	});
-	res.write(`<!DOCTYPE html>
+var getHead = () => {
+	return(`<!DOCTYPE html>
 		<html>${renderToString(<Head/>)}`);
-	next();
 }
 
-var getHeader = (req,res,next) => {
-	res.write(`<body><div id="root">${renderToString(<Header />)}`);
-	next();
+var getHeader = () => {
+	return(`<body><div id="root">${renderToString(<Header />)}`);
 }
-var getNavigation = (req,res,next) => {
-	let users = [];
-	const getUsers = pageNumber => {
-		request.get(`https://reqres.in/api/users?page=${pageNumber}`).then(res => {
-			if(pageNumber !== 3) {
-				users = [...users,...res.body.data];
-				getUsers(++pageNumber);
-			} else {
-				sendHtml();
-			}
-		});
-	}
-	const sendHtml = () => {
-		res.write(`${renderToString(<Navigation data={users} />)}`);
-		globalData.navigationList = users;
-		next();
-	}
-	getUsers(1);
+var getNavigation = () => {
+	return (`${renderToString(<Navigation data={globalData.navigationList} />)}`);
 }
 
-var getMainContent = (req,res,next) => {
-	request.get("https://reqres.in/api/users?delay=2").then(response => {
-		res.write(`${renderToString(<MainContent data={response.body.data} />)}`);
-		globalData.mainContent = response.body.data;
-		next();
-	});
+var getMainContent = () => {
+	return(`${renderToString(<MainContent data={globalData.mainContent} />)}`);
 }
 
-var getFooter = (req,res) => {
-	res.write(`${renderToString(<Footer />)}</div>
+var getFooter = () => {
+	return (`${renderToString(<Footer />)}</div>
 		</body>
 		<script>window.dataLayer=${JSON.stringify(globalData)}</script>		
 		<script src="../../bundle.js"></script>
 		</html>`);
-	res.end();
 }
 
-server.get("/",[getHead,getHeader,getNavigation,getMainContent,getFooter]);
+var getData = (req,res,next) => {
+	let users = [];
+	const usersPromise = new Promise((resolve,reject)=> {
+		const getUsers = pageNumber => {
+			request.get(`https://reqres.in/api/users?page=${pageNumber}`).then(res => {
+				if(pageNumber !== 3) {
+					users = [...users,...res.body.data];
+					getUsers(++pageNumber);
+				} else {
+					globalData.navigationList = users
+					resolve();
+				}
+			});
+		}
+		getUsers(1);
+	});
+	const performersPromise = new Promise((resolve,reject)=> {
+		request.get("https://reqres.in/api/users?delay=2").then(response => {
+			globalData.mainContent = response.body.data;
+			resolve();
+		});
+	});
+	Promise.all([usersPromise,performersPromise]).then(res=> next());
+}
+
+var generateHtml = (req,res,next) => {
+	res.send(`${getHead()}${getHeader()}${getNavigation()}${getMainContent()}${getFooter()}`);
+}
+
+server.get("/",[getData,generateHtml]);
 
 server.listen(port,()=>{
 	console.log("express server is listing on configured port "+port);
