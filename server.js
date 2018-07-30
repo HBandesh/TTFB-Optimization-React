@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {Head} from './app/components/head';
@@ -14,6 +15,7 @@ server = express();
 
 let globalData = {};
 
+server.use(compression());
 server.use(express.static('./public'));
 
 var getHead = () => {
