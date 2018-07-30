@@ -34,15 +34,33 @@ var getHeader = (req,res,next) => {
 	next();
 }
 var getNavigation = (req,res,next) => {
-	res.write(`${renderToString(<Navigation data={globalData.navigationList} />)}`);
-	res.flush();
-	next();
+	let users = [];
+	const getUsers = pageNumber => {
+		request.get(`https://reqres.in/api/users?page=${pageNumber}`).then(res => {
+			if(pageNumber !== 3) {
+				users = [...users,...res.body.data];
+				getUsers(++pageNumber);
+			} else {
+				sendHtml();
+			}
+		});
+	}
+	const sendHtml = () => {
+		res.write(`${renderToString(<Navigation data={users} />)}`);
+		res.flush();
+		globalData.navigationList = users;
+		next();
+	}
+	getUsers(1);
 }
 
 var getMainContent = (req,res,next) => {
-	res.write(`${renderToString(<MainContent data={globalData.mainContent} />)}`);
-	res.flush();
-	next();
+	request.get("https://reqres.in/api/users?delay=2").then(response => {
+		res.write(`${renderToString(<MainContent data={response.body.data} />)}`);
+		res.flush();
+		globalData.mainContent = response.body.data;
+		next();
+	});
 }
 
 var getFooter = (req,res) => {
@@ -55,32 +73,7 @@ var getFooter = (req,res) => {
 	res.end();
 }
 
-var getData = (req,res,next) => {
-	let users = [];
-	const usersPromise = new Promise((resolve,reject)=> {
-		const getUsers = pageNumber => {
-			request.get(`https://reqres.in/api/users?page=${pageNumber}`).then(res => {
-				if(pageNumber !== 3) {
-					users = [...users,...res.body.data];
-					getUsers(++pageNumber);
-				} else {
-					globalData.navigationList = users
-					resolve();
-				}
-			});
-		}
-		getUsers(1);
-	});
-	const performersPromise = new Promise((resolve,reject)=> {
-		request.get("https://reqres.in/api/users?delay=2").then(response => {
-			globalData.mainContent = response.body.data;
-			resolve();
-		});
-	});
-	Promise.all([usersPromise,performersPromise]).then(res=> next());
-}
-
-server.get("/",[getHead,getHeader,getData,getNavigation,getMainContent,getFooter]);
+server.get("/",[getHead,getHeader,getNavigation,getMainContent,getFooter]);
 
 server.listen(port,()=>{
 	console.log("express server is listing on configured port "+port);
