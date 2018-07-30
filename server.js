@@ -33,7 +33,7 @@ var getNavigation = (req,res,next) => {
 	let users = [];
 	const getUsers = pageNumber => {
 		request.get(`https://reqres.in/api/users?page=${pageNumber}`).then(res => {
-			if(pageNumber !== 4) {
+			if(pageNumber !== 3) {
 				users = [...users,...res.body.data];
 				getUsers(++pageNumber);
 			} else {
@@ -50,7 +50,7 @@ var getNavigation = (req,res,next) => {
 }
 
 var getMainContent = (req,res,next) => {
-	request.get("https://reqres.in/api/users?delay=3").then(response => {
+	request.get("https://reqres.in/api/users?delay=2").then(response => {
 		res.write(`${renderToString(<MainContent data={response.body.data} />)}`);
 		globalData.mainContent = response.body.data;
 		next();

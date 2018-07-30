@@ -18,7 +18,7 @@ export class Navigation extends React.Component {
 
     render() {
         return(
-            <section className="new-recruit-section">
+            <section className="section">
                 <h2 className="section-heading">New Recruits</h2>
                 <h3 className="section-sub-title">Click on names to reveal the complete identity of a recruit</h3>
                 <div className="jumbotron">

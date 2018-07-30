@@ -2,7 +2,8 @@ import React from 'react';
 
 export const  MainContent = ({data}) => {
     return(
-        <React.Fragment>
+        <section className="section">
+            <h2 className="section-heading">Our Top Performers of this week</h2>
             <table className="table">
                 <thead className="thead-dark">
                     <tr>
@@ -25,6 +26,6 @@ export const  MainContent = ({data}) => {
                     })}
                 </tbody>
             </table>
-        </React.Fragment>
+        </section>
     );
 }
