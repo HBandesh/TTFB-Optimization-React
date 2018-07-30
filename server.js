@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {Head} from './app/components/head';
@@ -14,6 +15,7 @@ server = express();
 
 let globalData = {};
 
+server.use(compression());
 server.use(express.static('./public'));
 
 var getHead = (req,res,next) => {
@@ -22,11 +24,13 @@ var getHead = (req,res,next) => {
 	});
 	res.write(`<!DOCTYPE html>
 		<html>${renderToString(<Head/>)}`);
+	res.flush();
 	next();
 }
 
 var getHeader = (req,res,next) => {
 	res.write(`<body><div id="root">${renderToString(<Header />)}`);
+	res.flush();
 	next();
 }
 var getNavigation = (req,res,next) => {
@@ -43,6 +47,7 @@ var getNavigation = (req,res,next) => {
 	}
 	const sendHtml = () => {
 		res.write(`${renderToString(<Navigation data={users} />)}`);
+		res.flush();
 		globalData.navigationList = users;
 		next();
 	}
@@ -52,6 +57,7 @@ var getNavigation = (req,res,next) => {
 var getMainContent = (req,res,next) => {
 	request.get("https://reqres.in/api/users?delay=2").then(response => {
 		res.write(`${renderToString(<MainContent data={response.body.data} />)}`);
+		res.flush();
 		globalData.mainContent = response.body.data;
 		next();
 	});
@@ -63,6 +69,7 @@ var getFooter = (req,res) => {
 		<script>window.dataLayer=${JSON.stringify(globalData)}</script>		
 		<script src="../../bundle.js"></script>
 		</html>`);
+	res.flush();
 	res.end();
 }
 
