@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {Head} from './app/components/head';
@@ -14,6 +15,7 @@ server = express();
 
 let globalData = {};
 
+server.use(compression());
 server.use(express.static('./public'));
 
 var getHead = (req,res,next) => {
@@ -22,39 +24,25 @@ var getHead = (req,res,next) => {
 	});
 	res.write(`<!DOCTYPE html>
 		<html>${renderToString(<Head/>)}`);
+	res.flush();
 	next();
 }
 
 var getHeader = (req,res,next) => {
 	res.write(`<body><div id="root">${renderToString(<Header />)}`);
+	res.flush();
 	next();
 }
 var getNavigation = (req,res,next) => {
-	let users = [];
-	const getUsers = pageNumber => {
-		request.get(`https://reqres.in/api/users?page=${pageNumber}`).then(res => {
-			if(pageNumber !== 3) {
-				users = [...users,...res.body.data];
-				getUsers(++pageNumber);
-			} else {
-				sendHtml();
-			}
-		});
-	}
-	const sendHtml = () => {
-		res.write(`${renderToString(<Navigation data={users} />)}`);
-		globalData.navigationList = users;
-		next();
-	}
-	getUsers(1);
+	res.write(`${renderToString(<Navigation data={globalData.navigationList} />)}`);
+	res.flush();
+	next();
 }
 
 var getMainContent = (req,res,next) => {
-	request.get("https://reqres.in/api/users?delay=2").then(response => {
-		res.write(`${renderToString(<MainContent data={response.body.data} />)}`);
-		globalData.mainContent = response.body.data;
-		next();
-	});
+	res.write(`${renderToString(<MainContent data={globalData.mainContent} />)}`);
+	res.flush();
+	next();
 }
 
 var getFooter = (req,res) => {
@@ -63,10 +51,36 @@ var getFooter = (req,res) => {
 		<script>window.dataLayer=${JSON.stringify(globalData)}</script>		
 		<script src="../../bundle.js"></script>
 		</html>`);
+	res.flush();
 	res.end();
 }
 
-server.get("/",[getHead,getHeader,getNavigation,getMainContent,getFooter]);
+var getData = (req,res,next) => {
+	let users = [];
+	const usersPromise = new Promise((resolve,reject)=> {
+		const getUsers = pageNumber => {
+			request.get(`https://reqres.in/api/users?page=${pageNumber}`).then(res => {
+				if(pageNumber !== 3) {
+					users = [...users,...res.body.data];
+					getUsers(++pageNumber);
+				} else {
+					globalData.navigationList = users
+					resolve();
+				}
+			});
+		}
+		getUsers(1);
+	});
+	const performersPromise = new Promise((resolve,reject)=> {
+		request.get("https://reqres.in/api/users?delay=2").then(response => {
+			globalData.mainContent = response.body.data;
+			resolve();
+		});
+	});
+	Promise.all([usersPromise,performersPromise]).then(res=> next());
+}
+
+server.get("/",[getHead,getHeader,getData,getNavigation,getMainContent,getFooter]);
 
 server.listen(port,()=>{
 	console.log("express server is listing on configured port "+port);
