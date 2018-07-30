@@ -1,17 +1,9 @@
 import React from 'react';
 
-export class Footer extends React.Component {
-
-    constructor() {
-        super();
-    }
-
-    render() {
-        return(
-            <footer>
-                <h2>End of chunked App</h2>
-                <a href="/">Home</a>
-            </footer>
-        );
-    }
+export const Footer = ({}) => {
+    return(
+        <footer>
+            <h4>I hope I was able to explain the concept :)</h4>
+        </footer>
+    );
 }
