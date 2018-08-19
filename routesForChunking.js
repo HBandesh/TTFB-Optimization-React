@@ -11,7 +11,7 @@ let promiseStackCenter = {};
 
 let globalData = {};
 
-var getHead = (req,res,next) => {
+const getHead = (req,res,next) => {
 	res.set({
 		'Content-Type': 'text/html; charset=UTF-8', //This is done to overcome the issue of minimum number of bytes needed to render the DOM in firefox.
 	});
@@ -21,12 +21,12 @@ var getHead = (req,res,next) => {
 	next();
 }
 
-var getHeader = (req,res,next) => {
+const getHeader = (req,res,next) => {
 	res.write(`<body><div id="root">${renderToString(<Header />)}`);
 	res.flush();
 	next();
 }
-var getNavigation = (req,res,next) => {
+const getNavigation = (req,res,next) => {
 
     const sendHtml = () => {
 		res.write(`${renderToString(<Navigation data={globalData.navigationList} />)}`);
@@ -43,7 +43,7 @@ var getNavigation = (req,res,next) => {
     }
 }
 
-var getMainContent = (req,res,next) => {
+const getMainContent = (req,res,next) => {
 
     const sendHtml = () => {
         res.write(`${renderToString(<MainContent data={globalData.mainContent} />)}`);
@@ -60,7 +60,7 @@ var getMainContent = (req,res,next) => {
     }
 }
 
-var getFooter = (req,res) => {
+const getFooter = (req,res) => {
 	res.write(`${renderToString(<Footer />)}</div>
 		</body>
 		<script>window.dataLayer=${JSON.stringify(globalData)}</script>		
@@ -105,6 +105,6 @@ const getPageData = (req,res,next) => {
     }));
 }
 
-export const route = () => {
+export const routesForChunking = () => {
     return ([getHead,getHeader,getPageData,getNavigation,getMainContent,getFooter]);
 }

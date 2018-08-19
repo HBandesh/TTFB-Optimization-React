@@ -7,7 +7,7 @@ export const  MainContent = ({data}) => {
             <table className="table">
                 <thead className="thead-dark">
                     <tr>
-                        <th>ID</th>
+                        <th>Sr. No.</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Avatar</th>

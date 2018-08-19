@@ -9,10 +9,21 @@ export class Navigation extends React.Component {
         }
     }
 
+    generateId = () => {
+        let text = "";
+        let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      
+        for (let i = 0; i < 5; i++)
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+      
+        return text;
+    }
+
     changeUser = e => {
-        const selectedUser = this.users[e.target.dataset.index];
+        const selectedUser = this.users[e.target.dataset.index].id;
         this.setState({
-            selectedUserId: selectedUser.id,
+            selectedUserId: this.generateId(),
+            activeUser: selectedUser
         });
     }
 
@@ -26,7 +37,7 @@ export class Navigation extends React.Component {
                 </div>
                 <article className="avengers-list-wrapper">
                     {this.props.data.map((itm,idx) => 
-                        <div key={itm.id} className="card">
+                        <div key={itm.id} className={`${this.state.activeUser === idx+1? "active-user": ""} card`}>
                             <img className="card-img-top" src={itm.avatar} alt="avatar image"/>
                             <div className="card-body">
                                 <h5 className="card-title">{`${itm.first_name} ${itm.last_name}`}</h5>
