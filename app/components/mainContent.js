@@ -2,7 +2,7 @@ import React from 'react';
 
 export const  MainContent = ({data}) => {
     return(
-        <section className="section">
+        <section className="section flipInX animated">
             <h2 className="section-heading">Our Top Performers of this week</h2>
             <table className="table">
                 <thead className="thead-dark">

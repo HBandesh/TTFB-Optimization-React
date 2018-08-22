@@ -29,7 +29,7 @@ export class Navigation extends React.Component {
 
     render() {
         return(
-            <section className="section">
+            <section className="section slideInUp animated">
                 <h2 className="section-heading">New Recruits</h2>
                 <h3 className="section-sub-title">Click on names to reveal the complete identity of a recruit</h3>
                 <div className="jumbotron">
@@ -37,7 +37,7 @@ export class Navigation extends React.Component {
                 </div>
                 <article className="avengers-list-wrapper">
                     {this.props.data.map((itm,idx) => 
-                        <div key={itm.id} className={`${this.state.activeUser === idx+1? "active-user": ""} card`}>
+                        <div key={itm.id} className={`${this.state.activeUser === idx+1? "active-user rubberBand animated": ""} card`}>
                             <img className="card-img-top" src={itm.avatar} alt="avatar image"/>
                             <div className="card-body">
                                 <h5 className="card-title">{`${itm.first_name} ${itm.last_name}`}</h5>

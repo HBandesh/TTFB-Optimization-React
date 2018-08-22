@@ -7,6 +7,7 @@ export const Head = ({}) => {
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossOrigin="anonymous"/>
             <link rel="stylesheet" type="text/css" href="/style.css"/>
+            <link rel="stylesheet" type="text/css" href="/animate.css"/>
             <link rel="dns-prefetch" href="s3.amazonaws.com"/>
             <link rel="dns-prefetch" href="img00.deviantart.net"/>
             <link rel="dns-prefetch" href="longwallpapers.com"/>
