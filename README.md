@@ -50,6 +50,8 @@ Browser then creates the CSSOM (CSS Object Model)
 ![alt text](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/images/cssom-tree.png)
 
 The CSSOM and DOM trees are combined into a render tree, which is then used to compute the layout of each visible element and serves as an input to the paint process that renders the pixels to screen. This is what a render tree looks like
+
+![alt text](https://github.com/HBandesh/TTFB-Optimization-React/blob/master/public/images/render-tree-construction%20(1).png)
  
 Some nodes are not visible (for example, script tags, meta tags, and so on), and are omitted since they are not reflected in the rendered output. Some nodes are hidden via CSS and are also omitted from the render tree.
 
@@ -61,19 +63,21 @@ Note that the CSS is render blocking. Until the CSSOM is not constructed fully b
 
 Now let us add JavaScript to our example:->
 
+
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link href="style.css" rel="stylesheet">
-    <title>Critical Path: Script External</title>
-  </head>
-  <body>
-    <p>Hello <span>web performance</span> students!</p>
-    <div><img src="awesome-photo.jpg"></div>
-    <script src="app.js"></script>
-  </body>
+    <html>
+     <head>
+       <meta name="viewport" content="width=device-width,initial-scale=1">
+       <link href="style.css" rel="stylesheet">
+       <title>Critical Path</title>
+     </head>
+     <body>
+        <p>Hello <span>web performance</span> students!</p>
+        <div><img src="awesome-photo.jpg"></div>
+        <script src="app.js"></script>
+     </body>
 </html>
+
 
 By default, JavaScript execution is "parser blocking": when the browser encounters a script in the document it must pause DOM construction, download the file, hand over control to the JavaScript runtime, and let the script execute before proceeding with DOM construction. The browser does not know what the script is planning to do on the page, it assumes the worst case scenario and blocks the parser.
 
@@ -113,14 +117,13 @@ Look at the following images and decide, in which way would you want your websit
 
 Got an answer? It’s the first one obviously! No one really like to see the blank page for long enough. It is much better to render the HTML in chunks on the webpage which is what the google search pages and Amazon and other big giants do. Now when you first hit the URL of any website, the complete HTML of the page gets build up on server. Till that time the browser is sitting ideal doing nothing. After the HTML is built on server, for the page which has been requested, it is passed on to the browser. The browser then start building up the DOM and go through all the CRP steps as mentioned before. The following diagram will help us get this thing more clear.
 
- 
+ ![alt text](https://github.com/HBandesh/TTFB-Optimization-React/blob/master/public/images/Untitled%20Diagram.png)
 
 So why don’t we optimize the ideal time of browser and make browser start building up DOM , as the process is incremental, by sending the HTML chunk that is ready on server. In other words, we can flush out the HTML in chunks the moment they get ready instead of waiting for the entire HTML to get prepared. This will make browser to start building up the DOM/CSSOM tree instead of waiting ideal. Isn’t that a wonderful idea!
 
 Let us take an example to grab this idea even better. The following is the google search page:
 
- 
-
+ ![alt text](https://github.com/HBandesh/TTFB-Optimization-React/blob/master/public/images/googleAnalysis.png)
 
 Now suppose we hit this URL, browser dispatches request to server to serve this page. Server starts building this page and has completed the HTML of Part A but for Part B it has to fetch the data from some source which will take some more time. Now instead of waiting for the part B to get completed the server flushes out the completed HTML of part A to browser so that it starts building up the DOM and in meantime the server prepares the HTML of part B with the required data. In this way, the user would be able to see the webpage loading progressively on the browser. Sending HTML in chunks also reduces the Time to first byte greatly and improves performance and page speed index of the page. THIS IS WHAT GOOGLE IS ACTUALLY DOING IN THIER SEARCH PAGES! EVEN AMAZON THOWRS THEIR HEADER FIRST WHILE REST OF THE PAGE GETS PREPARED ON SERVER.
 
@@ -139,7 +142,9 @@ You can try the Live demo by visiting here.
 
 In the demo you can see links. The ‘Move to page without chunking’ link  will move you the page in which the HTML chunking concept has not been applied and the ‘Move to page with chunking’ link will move you to the page in which the chunking concept has been applied. Below is the screenshot of the page.
  
-
+![alt text](https://github.com/HBandesh/TTFB-Optimization-React/blob/master/public/images/chunking1.png)
+![alt text](https://github.com/HBandesh/TTFB-Optimization-React/blob/master/public/images/chunking2.png)
+![alt text](https://github.com/HBandesh/TTFB-Optimization-React/blob/master/public/images/chunking3.png)
  
 
  
