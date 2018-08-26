@@ -1,6 +1,6 @@
 Have you ever wondered why the Google search pages or Amazon site loads really fast? Well stay with me while I take you through the concept, implemented by the big giants, that drastically reduces Time to first byte, improves time to interactivity and page speed index. But firstly, let us go through some concepts that leads to the idea.
 
-#Analyzing Critical Rendering Path (CRP)
+# Analyzing Critical Rendering Path (CRP)
  
 First of all, let us define the vocabulary that we would be using frequently :->
 
@@ -89,7 +89,7 @@ CSS is DEMON for any webpage! It is render blocking and parse blocking as well. 
 
 Let us look into some ways to optimize the CRP.
 
-#OPTIMIZING THE CRP:
+# OPTIMIZING THE CRP:
 
 Till now we know that the CSS is a DEMON. Get it to the client as soon and as quickly as possible to optimize the time to first render. However, what if we have some CSS styles that are only used under certain conditions, for example, when the page is being printed or being projected onto a large monitor? It would be nice if we didn’t have to block rendering on these resources. CSS "media types" and "media queries" allow us to address these use cases:
 
@@ -109,7 +109,7 @@ Adding the async keyword to the script tag tells the browser not to block DOM co
 
 *And finally!!!!!! The climax part of the blog arrives, where I will tell you the main secret, apart from the optimizations stated above, that big companies imply and do wonders!!!!*
 
-#SENDING HTML IN CHUNKS FROM SERVER
+# SENDING HTML IN CHUNKS FROM SERVER
 
 Look at the following images and decide, in which way would you want your websites to render :->
 
