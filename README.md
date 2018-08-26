@@ -89,7 +89,7 @@ CSS is DEMON for any webpage! It is render blocking and parse blocking as well. 
 
 Let us look into some ways to optimize the CRP.
 
-# Optimizing the CRP:
+# Optimizing the CRP
 
 Till now we know that the CSS is a DEMON. Get it to the client as soon and as quickly as possible to optimize the time to first render. However, what if we have some CSS styles that are only used under certain conditions, for example, when the page is being printed or being projected onto a large monitor? It would be nice if we didn’t have to block rendering on these resources. CSS "media types" and "media queries" allow us to address these use cases:
 
