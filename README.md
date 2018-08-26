@@ -97,14 +97,14 @@ Till now we know that the CSS is a DEMON. Get it to the client as soon and as qu
 <link href="print.css" rel="stylesheet" media="print">
 <link href="other.css" rel="stylesheet" media="(min-width: 40em)">
 
-A media query consists of a media type and zero or more expressions that check for the conditions of particular media features. For example, our first stylesheet declaration doesn't provide a media type or query, so it applies in all cases; that is to say, it is always render blocking. On the other hand, the second stylesheet declaration applies only when the content is being printed---perhaps you want to rearrange the layout, change the fonts, and so on, and hence this stylesheet declaration doesn't need to block the rendering of the page when it is first loaded. Finally, the last stylesheet declaration provides a "media query," which is executed by the browser: if the conditions match, the browser blocks rendering until the style sheet is downloaded and processed. When declaring your style sheet assets, pay close attention to the media type and queries; they greatly impact critical rendering path performance.
+A [media query](https://developers.google.com/web/fundamentals/design-and-ux/responsive/#use-css-media-queries-for-responsiveness) consists of a media type and zero or more expressions that check for the conditions of particular media features. For example, our first stylesheet declaration doesn't provide a media type or query, so it applies in all cases; that is to say, it is always render blocking. On the other hand, the second stylesheet declaration applies only when the content is being printed---perhaps you want to rearrange the layout, change the fonts, and so on, and hence this stylesheet declaration doesn't need to block the rendering of the page when it is first loaded. Finally, the last stylesheet declaration provides a "media query," which is executed by the browser: if the conditions match, the browser blocks rendering until the style sheet is downloaded and processed. When declaring your style sheet assets, pay close attention to the media type and queries; they greatly impact critical rendering path performance.
 
 
 By default all JavaScript is parser blocking. A signal to the browser that the script does not need to be executed at the exact point where it's referenced allows the browser to continue to construct the DOM and let the script execute when it is ready; for example, after the file is fetched from cache or a remote server. To achieve this, we mark our script as async.
 
 <script src="app.js" async></script>
 
-Adding the async keyword to the script tag tells the browser not to block DOM construction while it waits for the script to become available, which can significantly improve performance. One more plus point of async attribute is that the script does not gets blocked waiting for CSSOM to get ready. Analytics script is great example for async attribute as the script does not changes the DOM in any way. There is one more attribute for script tags, which is defer. You can learn about defer by visiting here.
+Adding the async keyword to the script tag tells the browser not to block DOM construction while it waits for the script to become available, which can significantly improve performance. One more plus point of async attribute is that the script does not gets blocked waiting for CSSOM to get ready. Analytics script is great example for async attribute as the script does not changes the DOM in any way. There is one more attribute for script tags, which is defer. You can learn about defer by visiting [here](https://hacks.mozilla.org/2009/06/defer/).
 
 
 And finally!!!!!! The climax part of the blog arrives, where I will tell you the main secret, apart from the optimizations stated above, that big companies imply and do wonders!!!!
@@ -136,9 +136,9 @@ Well we have different ways in different languages. We have a method called flus
 
 NOTE THAT THE BROSWER DOES NOT MAKE REPITIVE CALLS TO SERVER TO GET ALL THE CHUNKS. ALL THE HTML CHUNKS ARE SERVED OVER A SINGLE CALL TO SERVER.
 
-I have made a POC on Node JS (Express) + React, where the react components are rendered on Node and each component is flushed to browser as soon as their HTML gets prepared on Node. You can find the source code here.
+I have made a POC on Node JS (Express) + React, where the react components are rendered on Node and each component is flushed to browser as soon as their HTML gets prepared on Node. You can find the source code [here](https://github.com/HBandesh/TTFB-Optimization-React).
 
-You can try the Live demo by visiting here.
+You can try the Live demo by visiting [here](http://www.harnoorbandesh.co.in/).
 
 In the demo you can see links. The ‘Move to page without chunking’ link  will move you the page in which the HTML chunking concept has not been applied and the ‘Move to page with chunking’ link will move you to the page in which the chunking concept has been applied. Below is the screenshot of the page.
  
@@ -149,7 +149,7 @@ In the demo you can see links. The ‘Move to page without chunking’ link  wil
 
  
 
-The page is divided into 4 parts. The moment the part A gets prepared on server it is flushed to the browser so that the browser can start building up the DOM. The PART B is build up using the data from an API, the moment browser creates the HTML of part A , the HTML of part B gets prepared on server and is then served to browser, as DOM construction is an incremental process. The story goes on for PART C and PART D. Here is one catch! Even before sending the PART A, I send one more chunk to browser which is the head tag of HTML. In the head tag I have preloaded all the heavy banner images in header and footer, done pre connect and dns-prefetch of all the remaining images (Learn more about preload, prefetch and pre-connect here). The head tag also contains the CSS file links. Now as the PART A gets prepared on the server the browser dispatches the request of all the resources in the head section so that page gets populated faster when the HTML  arrives.
+The page is divided into 4 parts. The moment the part A gets prepared on server it is flushed to the browser so that the browser can start building up the DOM. The PART B is build up using the data from an API, the moment browser creates the HTML of part A , the HTML of part B gets prepared on server and is then served to browser, as DOM construction is an incremental process. The story goes on for PART C and PART D. Here is one catch! Even before sending the PART A, I send one more chunk to browser which is the head tag of HTML. In the head tag I have preloaded all the heavy banner images in header and footer, done pre connect and dns-prefetch of all the remaining images (Learn more about preload, prefetch and pre-connect [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Preloading_content)). The head tag also contains the CSS file links. Now as the PART A gets prepared on the server the browser dispatches the request of all the resources in the head section so that page gets populated faster when the HTML  arrives.
 
 The performance test on both the pages were run with the help of lighthouse extension in chrome. And the result are really encouraging. (The test was run 10 times on both the pages and the average of all the values are displayed below)
 
@@ -160,7 +160,7 @@ Speed Index	10848 ms	3547 ms
 Time to Interactivity	7623 ms	7170 ms
 First Meaningful Paint	2673 ms	2173 ms
 
-Learn more about Time to Interactivity, Speed Index, first meaningful paint.
+Learn more about [Time to Interactivity](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive), [Speed Index](https://developers.google.com/web/tools/lighthouse/audits/speed-index), [first meaningful paint](https://developers.google.com/web/tools/lighthouse/audits/first-meaningful-paint).
 
 This basic idea implementation can drastically improve the performance of a web page. I Hope I was able to explain the concept. 
 
