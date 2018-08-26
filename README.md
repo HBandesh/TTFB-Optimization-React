@@ -1,11 +1,11 @@
 Have you ever wondered why the Google search pages or Amazon site loads really fast? Well stay with me while I take you through the concept, implemented by the big giants, that drastically reduces Time to first byte, improves time to interactivity and page speed index. But firstly, let us go through some concepts that leads to the idea.
 
-Analyzing Critical Rendering Path (CRP)
+#Analyzing Critical Rendering Path (CRP)
  
 First of all, let us define the vocabulary that we would be using frequently :->
 
-1.	 Critical Resource: Resource that could block initial rendering of the page.
-2.	Time To First Byte(TTFB): Measures the duration from the user or client making an HTTP request to the first byte of the page being received by the client's browser.
+1.	 **Critical Resource**: Resource that could block initial rendering of the page.
+2.	**Time To First Byte(TTFB)**: Measures the duration from the user or client making an HTTP request to the first byte of the page being received by the client's browser.
 
 Optimizing web performance is all about understanding what happens in the intermediate steps between receiving the HTML, CSS, and JavaScript bytes and the required processing to turn them into rendered pixels - that's the critical rendering path(CRP).
 
@@ -35,7 +35,7 @@ Browser converts it into a tree object called DOM as :->
 
 ![alt text](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/images/dom-tree.png)
 
-NOTE THAT THE DOM CONSTRUCTION PROCESS IS INCREMENTAL (THIS IS THE BASIS OF THE IDEA FOR WHICH I AM WRITING THIS BLOG, PROGRESSIVE RENDERING).
+**NOTE THAT THE DOM CONSTRUCTION PROCESS IS INCREMENTAL (THIS IS THE BASIS OF THE IDEA FOR WHICH I AM WRITING THIS BLOG, PROGRESSIVE RENDERING).**
 
 While the browser was constructing the DOM of our simple page, it encountered a link tag in the head section of the document referencing an external CSS stylesheet: style.css. Anticipating that it needs this resource to render the page, it immediately dispatches a request for this resource, which comes back with the following content:
 
@@ -59,7 +59,7 @@ Now with the Render tree in place we can head for the Layout step. The output of
 
 Finally, now that we know which nodes are visible, and their computed styles and geometry, we can pass this information to the final stage, which converts each node in the render tree to actual pixels on the screen. This step is often referred to as "painting".
 
-Note that the CSS is render blocking. Until the CSSOM is not constructed fully browser cannot proceed to the render tree step. Hence we need to serve the CSS file to browser as soon as possible which is why we keep all the link tags in head section.
+**Note that the CSS is render blocking. Until the CSSOM is not constructed fully browser cannot proceed to the render tree step. Hence we need to serve the CSS file to browser as soon as possible which is why we keep all the link tags in head section.**
 
 Now let us add JavaScript to our example:->
 
@@ -89,7 +89,7 @@ CSS is DEMON for any webpage! It is render blocking and parse blocking as well. 
 
 Let us look into some ways to optimize the CRP.
 
-OPTIMIZING THE CRP:
+#OPTIMIZING THE CRP:
 
 Till now we know that the CSS is a DEMON. Get it to the client as soon and as quickly as possible to optimize the time to first render. However, what if we have some CSS styles that are only used under certain conditions, for example, when the page is being printed or being projected onto a large monitor? It would be nice if we didn’t have to block rendering on these resources. CSS "media types" and "media queries" allow us to address these use cases:
 
@@ -97,7 +97,7 @@ Till now we know that the CSS is a DEMON. Get it to the client as soon and as qu
 <link href="print.css" rel="stylesheet" media="print">
 <link href="other.css" rel="stylesheet" media="(min-width: 40em)">
 
-A [media query](https://developers.google.com/web/fundamentals/design-and-ux/responsive/#use-css-media-queries-for-responsiveness) consists of a media type and zero or more expressions that check for the conditions of particular media features. For example, our first stylesheet declaration doesn't provide a media type or query, so it applies in all cases; that is to say, it is always render blocking. On the other hand, the second stylesheet declaration applies only when the content is being printed---perhaps you want to rearrange the layout, change the fonts, and so on, and hence this stylesheet declaration doesn't need to block the rendering of the page when it is first loaded. Finally, the last stylesheet declaration provides a "media query," which is executed by the browser: if the conditions match, the browser blocks rendering until the style sheet is downloaded and processed. When declaring your style sheet assets, pay close attention to the media type and queries; they greatly impact critical rendering path performance.
+A [media query](https://developers.google.com/web/fundamentals/design-and-ux/responsive/#use-css-media-queries-for-responsiveness) consists of a media type and zero or more expressions that check for the conditions of particular media features. For example, our first stylesheet declaration doesn't provide a media type or query, so it applies in all cases; that is to say, it is always render blocking. On the other hand, the second stylesheet declaration applies only when the content is being printed---perhaps you want to rearrange the layout, change the fonts, and so on, and hence this stylesheet declaration doesn't need to block the rendering of the page when it is first loaded. Finally, the last stylesheet declaration provides a "media query," which is executed by the browser: if the conditions match, the browser blocks rendering until the style sheet is downloaded and processed. **When declaring your style sheet assets, pay close attention to the media type and queries; they greatly impact critical rendering path performance.**
 
 
 By default all JavaScript is parser blocking. A signal to the browser that the script does not need to be executed at the exact point where it's referenced allows the browser to continue to construct the DOM and let the script execute when it is ready; for example, after the file is fetched from cache or a remote server. To achieve this, we mark our script as async.
@@ -107,9 +107,9 @@ By default all JavaScript is parser blocking. A signal to the browser that the s
 Adding the async keyword to the script tag tells the browser not to block DOM construction while it waits for the script to become available, which can significantly improve performance. One more plus point of async attribute is that the script does not gets blocked waiting for CSSOM to get ready. Analytics script is great example for async attribute as the script does not changes the DOM in any way. There is one more attribute for script tags, which is defer. You can learn about defer by visiting [here](https://hacks.mozilla.org/2009/06/defer/).
 
 
-And finally!!!!!! The climax part of the blog arrives, where I will tell you the main secret, apart from the optimizations stated above, that big companies imply and do wonders!!!!
+*And finally!!!!!! The climax part of the blog arrives, where I will tell you the main secret, apart from the optimizations stated above, that big companies imply and do wonders!!!!*
 
-SENDING HTML IN CHUNKS FROM SERVER
+#SENDING HTML IN CHUNKS FROM SERVER
 
 Look at the following images and decide, in which way would you want your websites to render :->
 
@@ -125,7 +125,9 @@ Let us take an example to grab this idea even better. The following is the googl
 
  ![alt text](https://github.com/HBandesh/TTFB-Optimization-React/blob/master/public/images/googleAnalysis.png)
 
-Now suppose we hit this URL, browser dispatches request to server to serve this page. Server starts building this page and has completed the HTML of Part A but for Part B it has to fetch the data from some source which will take some more time. Now instead of waiting for the part B to get completed the server flushes out the completed HTML of part A to browser so that it starts building up the DOM and in meantime the server prepares the HTML of part B with the required data. In this way, the user would be able to see the webpage loading progressively on the browser. Sending HTML in chunks also reduces the Time to first byte greatly and improves performance and page speed index of the page. THIS IS WHAT GOOGLE IS ACTUALLY DOING IN THIER SEARCH PAGES! EVEN AMAZON THOWRS THEIR HEADER FIRST WHILE REST OF THE PAGE GETS PREPARED ON SERVER.
+Now suppose we hit this URL, browser dispatches request to server to serve this page. Server starts building this page and has completed the HTML of Part A but for Part B it has to fetch the data from some source which will take some more time. Now instead of waiting for the part B to get completed the server flushes out the completed HTML of part A to browser so that it starts building up the DOM and in meantime the server prepares the HTML of part B with the required data. In this way, the user would be able to see the webpage loading progressively on the browser. Sending HTML in chunks also reduces the Time to first byte greatly and improves performance and page speed index of the page. 
+
+**THIS IS WHAT GOOGLE IS ACTUALLY DOING IN THIER SEARCH PAGES! EVEN AMAZON THOWRS THEIR HEADER FIRST WHILE REST OF THE PAGE GETS PREPARED ON SERVER.**
 
 Sending the HTML in chunks also serves one more purpose of optimization. As your <head> tag reaches the client first, the browser initiates the CSS and other requests in head tag, which helps the browser to download other critical resources while the rest of HTML is prepared by server. You can even preload the heavy images in head tag which will be used by the HTML that is yet to come from server, improving page load time!
 
@@ -134,7 +136,7 @@ Now the question comes on how to send HTML in chunks  from server side?
 
 Well we have different ways in different languages. We have a method called flush in Java, .Net and PHP. In Node JS we need to res.write() whenever our HTML chunk is ready.
 
-NOTE THAT THE BROSWER DOES NOT MAKE REPITIVE CALLS TO SERVER TO GET ALL THE CHUNKS. ALL THE HTML CHUNKS ARE SERVED OVER A SINGLE CALL TO SERVER.
+**NOTE THAT THE BROSWER DOES NOT MAKE REPITIVE CALLS TO SERVER TO GET ALL THE CHUNKS. ALL THE HTML CHUNKS ARE SERVED OVER A SINGLE CALL TO SERVER.**
 
 I have made a POC on Node JS (Express) + React, where the react components are rendered on Node and each component is flushed to browser as soon as their HTML gets prepared on Node. You can find the source code [here](https://github.com/HBandesh/TTFB-Optimization-React).
 
