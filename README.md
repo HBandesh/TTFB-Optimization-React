@@ -89,7 +89,7 @@ CSS is DEMON for any webpage! It is render blocking and parse blocking as well. 
 
 Let us look into some ways to optimize the CRP.
 
-# OPTIMIZING THE CRP:
+# Optimizing the CRP:
 
 Till now we know that the CSS is a DEMON. Get it to the client as soon and as quickly as possible to optimize the time to first render. However, what if we have some CSS styles that are only used under certain conditions, for example, when the page is being printed or being projected onto a large monitor? It would be nice if we didn’t have to block rendering on these resources. CSS "media types" and "media queries" allow us to address these use cases:
 
@@ -109,7 +109,7 @@ Adding the async keyword to the script tag tells the browser not to block DOM co
 
 *And finally!!!!!! The climax part of the blog arrives, where I will tell you the main secret, apart from the optimizations stated above, that big companies imply and do wonders!!!!*
 
-# SENDING HTML IN CHUNKS FROM SERVER
+# Sending HTML in chunks from server
 
 Look at the following images and decide, in which way would you want your websites to render :->
 
