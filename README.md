@@ -155,12 +155,13 @@ The page is divided into 4 parts. The moment the part A gets prepared on server 
 
 The performance test on both the pages were run with the help of lighthouse extension in chrome. And the result are really encouraging. (The test was run 10 times on both the pages and the average of all the values are displayed below)
 
-PARAMETER	NON CHUNKING	CHUNKING
-Performance	60	77
-TTFB	2.75 seconds	0.099 seconds
-Speed Index	10848 ms	3547 ms
-Time to Interactivity	7623 ms	7170 ms
-First Meaningful Paint	2673 ms	2173 ms
+| PARAMETER |	NON CHUNKING |	CHUNKING |
+| --- | ---| --- |
+| Performance |	60 |	77 |
+|TTFB |	2.75 seconds |	0.099 seconds |
+|Speed Index |	10848 ms |	3547 ms |
+|Time to Interactivity |	7623 ms |	7170 ms |
+|First Meaningful Paint |	2673 ms |	2173 ms |
 
 Learn more about [Time to Interactivity](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive), [Speed Index](https://developers.google.com/web/tools/lighthouse/audits/speed-index), [first meaningful paint](https://developers.google.com/web/tools/lighthouse/audits/first-meaningful-paint).
 
