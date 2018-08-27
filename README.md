@@ -93,9 +93,11 @@ Let us look into some ways to optimize the CRP.
 
 Till now we know that the CSS is a DEMON. Get it to the client as soon and as quickly as possible to optimize the time to first render. However, what if we have some CSS styles that are only used under certain conditions, for example, when the page is being printed or being projected onto a large monitor? It would be nice if we didn’t have to block rendering on these resources. CSS "media types" and "media queries" allow us to address these use cases:
 
-<link href="style.css" rel="stylesheet">
-<link href="print.css" rel="stylesheet" media="print">
-<link href="other.css" rel="stylesheet" media="(min-width: 40em)">
+```
+  <link href="style.css" rel="stylesheet">
+  <link href="print.css" rel="stylesheet" media="print">
+  <link href="other.css" rel="stylesheet" media="(min-width: 40em)">
+```
 
 A [media query](https://developers.google.com/web/fundamentals/design-and-ux/responsive/#use-css-media-queries-for-responsiveness) consists of a media type and zero or more expressions that check for the conditions of particular media features. For example, our first stylesheet declaration doesn't provide a media type or query, so it applies in all cases; that is to say, it is always render blocking. On the other hand, the second stylesheet declaration applies only when the content is being printed---perhaps you want to rearrange the layout, change the fonts, and so on, and hence this stylesheet declaration doesn't need to block the rendering of the page when it is first loaded. Finally, the last stylesheet declaration provides a "media query," which is executed by the browser: if the conditions match, the browser blocks rendering until the style sheet is downloaded and processed. **When declaring your style sheet assets, pay close attention to the media type and queries; they greatly impact critical rendering path performance.**
 
