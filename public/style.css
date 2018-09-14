@@ -79,4 +79,39 @@ footer h4{
     padding-top: 150px;
     text-align: center;
 }
+@media screen and (max-width: 480px) {
+    .header {
+        background-size: 100% 100%;
+    }
+    .header-logo {
+        height: 50px;
+        padding-top: 2%;
+    }
+    .header h1  {
+        padding: 1% 0px 16% 0px;
+    }
+    .section-heading, .section-sub-title {
+        font-size: 1.5rem;
+    }
+    .jumbotron {
+        border-radius: 15%;
+        width: 80%;
+    }
+    .jumbotron h4 {
+        font-size: 1.5rem;
+    }
+    .card {
+        width: 100%;
+    }
+    .section {
+        padding-top: 10%;
+    }
+    footer {
+        background-size: 100% 100%;
+        height: 300px;
+    }
+    footer h4 {
+        padding-top: 100px;
+    }
+}
 
