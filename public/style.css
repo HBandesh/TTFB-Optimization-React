@@ -38,6 +38,9 @@ body {
     margin-bottom: 4%;
     margin: 0 4% 4%;
 }
+.card-img-top {
+    height: auto;
+}
 .active-user {
     box-shadow: 0px 1px 15px 4px #ffd700;
 }
@@ -79,7 +82,10 @@ footer h4{
     padding-top: 150px;
     text-align: center;
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
     .header {
         background-size: 100% 100%;
     }
@@ -112,6 +118,9 @@ footer h4{
     }
     footer h4 {
         padding-top: 100px;
+    }
+    .card-img-top {
+        height: 300px;
     }
 }
 
