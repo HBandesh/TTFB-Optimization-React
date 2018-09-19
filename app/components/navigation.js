@@ -30,6 +30,9 @@ export class Navigation extends React.Component {
     render() {
         return(
             <section className="section slideInUp animated">
+                <button id="btnPush"></button>
+                <div className="js-subscription-json"></div>
+                <div className="js-subscription-details is-invisible"></div>
                 <h2 className="section-heading">New Recruits</h2>
                 <h3 className="section-sub-title">Click on names to reveal the complete identity of a recruit</h3>
                 <div className="jumbotron">
