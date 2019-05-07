@@ -1,3 +1,6 @@
+/**
+ * @module Header This module implements the functionality and the HTML of header
+ */
 import React from 'react';
 
 export const  Header = ({}) => {

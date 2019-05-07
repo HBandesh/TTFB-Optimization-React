@@ -1,3 +1,6 @@
+/**
+ * @module MainContent This module implements the functionality and the HTML of Main content
+ */
 import React from 'react';
 
 export const  MainContent = ({data}) => {

@@ -1,3 +1,8 @@
+/**
+ * @module routesForChunking This modules builds up the page with the concept of sending the 
+ * 								HTML back in chunks
+ */
+
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {Head} from './app/components/head';
@@ -11,6 +16,11 @@ let promiseStackCenter = {};
 
 let globalData = {};
 
+/**
+ * @function getHead This function makes the head part of the HTML. It internally
+ * 					 complies the react component of the same as well. Its flushes the prepared html back to client.
+ * @returns {string} Returns the HTML string
+ */
 const getHead = (req,res,next) => {
 	res.set({
 		'Content-Type': 'text/html; charset=UTF-8', //This is done to overcome the issue of minimum number of bytes needed to render the DOM in firefox.
@@ -21,11 +31,22 @@ const getHead = (req,res,next) => {
 	next();
 }
 
+/**
+ * @function getHeader This function makes the header part of the HTML. It internally
+ * 					 complies the react component of the same as well. Its flushes the prepared html back to client.
+ * @returns {string} Returns the HTML string
+ */
 const getHeader = (req,res,next) => {
 	res.write(`<body><div id="root">${renderToString(<Header />)}`);
 	res.flush();
 	next();
 }
+
+/**
+ * @function getNavigation This function makes the navigation part of the HTML. It internally
+ * 					 complies the react component of the same as well. Its flushes the prepared html back to client.
+ * @returns {string} Returns the HTML string
+ */
 const getNavigation = (req,res,next) => {
 
     const sendHtml = () => {
@@ -43,6 +64,11 @@ const getNavigation = (req,res,next) => {
     }
 }
 
+/**
+ * @function getMainContent This function makes the main content part of the HTML. It internally
+ * 					 complies the react component of the same as well. Its flushes the prepared html back to client.
+ * @returns {string} Returns the HTML string
+ */
 const getMainContent = (req,res,next) => {
 
     const sendHtml = () => {
@@ -60,6 +86,13 @@ const getMainContent = (req,res,next) => {
     }
 }
 
+
+/**
+ * @function getFooter This function makes the footer part of the HTML. It internally
+ * 					   complies the react component of the same as well. Additionally this set the data
+ * 					   on a window object. Its flushes the prepared html back to client.
+ * @returns {string} Returns the HTML string
+ */
 const getFooter = (req,res) => {
 	res.write(`${renderToString(<Footer />)}</div>
 		</body>
@@ -70,12 +103,19 @@ const getFooter = (req,res) => {
 	res.end();
 }
 
+/**
+ * @function updatePromisCenterObj This function updates the promise stack for the react components.
+ * @param {String} component Name of the part for whose data is ready
+ */
 const updatePromisCenterObj = component => {
     promiseStackCenter[component] = {};
     promiseStackCenter[component]["isLoaded"] = false;
     promiseStackCenter[component]["promiseStack"] = [];
 }
 
+/**
+ * @function getPageData This function gathers the data required to build to page but making AJAX calls.
+ */
 const getPageData = (req,res,next) => {
     let users = [];
     updatePromisCenterObj("mainContent");

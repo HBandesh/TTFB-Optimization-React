@@ -1,3 +1,6 @@
+/**
+ * @module Head This module implements the functionality and the HTML of head
+ */
 import React from 'react';
 
 export const Head = ({}) => {

@@ -1,3 +1,7 @@
+/**
+ * @module Navigation This module implements the functionality and the HTML of navigation
+ */
+
 import React from "react";
 
 export class Navigation extends React.Component {
