@@ -19,6 +19,8 @@ export const Head = ({}) => {
             <link rel="preconnect" href="http://longwallpapers.com"/>
             <link rel="preload" href="http://longwallpapers.com/Desktop-Wallpaper/marvel-avengers-wallpapers-high-definition-For-Desktop-Wallpaper.jpg" as="image"/>
             <link rel="preload" href="https://img00.deviantart.net/bd6a/i/2013/220/e/2/thor__the_dark_world__hi_res_textless_banner__by_phetvanburton-d6hb9q0.jpg" as="image"/>
+            <link rel="manifest" href="/manifest.json" />
+            <meta name="theme-color" content="red"/>
         </head>
     );
 }

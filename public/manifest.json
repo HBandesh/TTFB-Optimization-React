@@ -1,0 +1,20 @@
+{
+    "name": "Chunking Site",
+    "short_name": "BITS",
+    "display": "standalone",
+    "start_url": "/",
+    "theme_color": "red",
+    "background_color": "blue",
+    "icons": [
+      {
+        "src": "avengers-logo.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "avengers-logo.png",
+        "sizes": "512X512",
+        "type": "image/png"
+      }
+    ]
+  }
