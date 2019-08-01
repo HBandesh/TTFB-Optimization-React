@@ -145,6 +145,9 @@ const getPageData = (req,res,next) => {
     }));
 }
 
+/**
+ * @function routesForChunking This function performs the task of sending the data in chunks back to the browser
+ */
 export const routesForChunking = () => {
     return ([getHead,getHeader,getPageData,getNavigation,getMainContent,getFooter]);
 }

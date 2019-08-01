@@ -1,3 +1,6 @@
+/**
+ * This Module contains the top most parent component of the App.
+ */
 import React from "react";
 import {Header} from './header'
 import {MainContent} from './mainContent';

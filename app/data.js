@@ -1,4 +1,8 @@
-var sleep = (milliseconds) => {
+/**
+ *THIS MODULE IS NO LONGER BEING USED BUT I HAVE STILL RETAINED IT FOR FUTURE.
+ */
+
+const sleep = (milliseconds) => {
     var arr = [];
     for (var i = 0; i < 166666; i++) {
         arr.push("<li>'Please chal ja'</li>");
@@ -6,6 +10,9 @@ var sleep = (milliseconds) => {
     return arr;
 }
 
+/**
+ * This is a dummy class for generating a random data to cause delay at Node End.
+ */
 export class Data {
     static getData = () => {
         const data = [];

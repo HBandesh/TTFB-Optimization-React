@@ -1,3 +1,7 @@
+/**
+ * This module is the entry point of Express.
+ */
+
 import express from 'express';
 import compression from 'compression';
 import {routesForChunking} from './routesForChunking';

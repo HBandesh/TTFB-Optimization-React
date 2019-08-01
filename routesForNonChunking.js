@@ -101,6 +101,11 @@ const generateHtml = (req,res,next) => {
 	res.send(`${getHead()}${getHeader()}${getNavigation()}${getMainContent()}${getFooter()}`);
 }
 
+
+/**
+ * @function routesForNonChunking This function builds up the eniter HTML and sends back to the browsers 
+ * 								  once all of it is done.
+ */
 export const routesForNonChunking = () => {
     return ([getData,generateHtml]);
 }
