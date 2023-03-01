@@ -1,0 +1,102 @@
+body {
+  background-color: var(--black);
+  color: var(--white);
+}
+.header {
+  background-image: url("../images/banner.webp");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: var(--red);
+  text-shadow: 2px 4px var(--black);
+  text-align: center;
+  height: 250px;
+  font-size: 1.5rem;
+}
+.header h1 {
+  padding-top: 1% 0px 16% 0px;
+}
+.header-logo {
+  height: 50px;
+  margin-top: 10px;
+}
+.section {
+  padding-top: 10%;
+  font-family: fantasy;
+}
+.section-heading,
+.section-sub-title {
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 10px 4%;
+}
+.avengers-list-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.card {
+  width: 100%;
+  margin-bottom: 4%;
+  margin: 0 4% 4%;
+}
+.table {
+  width: 65%;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 4%;
+  margin-bottom: 7%;
+}
+.selected-user {
+  background-color: var(--golden);
+  text-align: center;
+  color: var(--black);
+  width: max-content;
+  padding: 13px 17px;
+  margin: 50px auto;
+  font-size: 1.5rem;
+}
+.card-body {
+  color: var(--black);
+  background-color: var(--light-blue);
+}
+footer {
+  background-image: url(https://img00.deviantart.net/bd6a/i/2013/220/e/2/thor__the_dark_world__hi_res_textless_banner__by_phetvanburton-d6hb9q0.jpg);
+  color: var(--white);
+  text-shadow: 2px 4px var(--red);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .header,
+  footer {
+    height: 370px;
+  }
+  .header-logo {
+    height: 100px;
+  }
+  .h1 {
+    padding: 10px;
+  }
+  .section-heading,
+  .section-sub-title {
+    font-size: 2rem;
+  }
+  .selected-user,
+  .header,
+  footer {
+    font-size: 2.5rem;
+  }
+  .card {
+    width: 17%;
+  }
+  .section {
+    padding-top: 3%;
+  }
+}

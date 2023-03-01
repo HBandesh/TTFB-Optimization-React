@@ -1,18 +1,16 @@
 /**
- * @module routesForChunking This modules builds up the page with the concept of sending the 
+ * @module routesForChunking This modules builds up the page with the concept of sending the
  * 								HTML back in chunks
  */
 
-import React from 'react';
-import {renderToString} from 'react-dom/server';
-import {Head} from './app/components/head';
-import {Header} from './app/components/header';
-import {MainContent} from './app/components/mainContent';
-import {Footer} from './app/components/footer';
-import {Navigation} from './app/components/navigation';
-import request from 'superagent';
-
-let promiseStackCenter = {};
+import React from "react";
+import { renderToString } from "react-dom/server";
+import { Head } from "./app/components/Head.jsx";
+import { Header } from "./app/components/Header.jsx";
+import { TopPerformers } from "./app/components/TopPerformers.jsx";
+import { Footer } from "./app/components/Footer.jsx";
+import { NewUsers } from "./app/components/NewUsers.jsx";
+import request from "superagent";
 
 let globalData = {};
 
@@ -21,71 +19,48 @@ let globalData = {};
  * 					 complies the react component of the same as well. Its flushes the prepared html back to client.
  * @returns {string} Returns the HTML string
  */
-const getHead = (req,res,next) => {
-	res.set({
-		'Content-Type': 'text/html; charset=UTF-8', //This is done to overcome the issue of minimum number of bytes needed to render the DOM in firefox.
-	});
-	res.write(`<!DOCTYPE html>
-		<html>${renderToString(<Head/>)}`);
-	res.flush();
-	next();
-}
+const getHead = (req, res, next) => {
+  res.set({
+    "Content-Type": "text/html; charset=UTF-8", //This is done to overcome the issue of minimum number of bytes needed to render the DOM in firefox.
+  });
+  res.write(`<!DOCTYPE html>
+		<html>${renderToString(<Head />)}`);
+  res.flush();
+  next();
+};
 
 /**
  * @function getHeader This function makes the header part of the HTML. It internally
  * 					 complies the react component of the same as well. Its flushes the prepared html back to client.
  * @returns {string} Returns the HTML string
  */
-const getHeader = (req,res,next) => {
-	res.write(`<body><div id="root">${renderToString(<Header />)}`);
-	res.flush();
-	next();
-}
+const getHeader = (req, res, next) => {
+  res.write(`<body><div id="root">${renderToString(<Header />)}`);
+  res.flush();
+  next();
+};
 
 /**
- * @function getNavigation This function makes the navigation part of the HTML. It internally
+ * @function getNewUsers This function makes the new users part of the HTML. It internally
  * 					 complies the react component of the same as well. Its flushes the prepared html back to client.
  * @returns {string} Returns the HTML string
  */
-const getNavigation = (req,res,next) => {
-
-    const sendHtml = () => {
-		res.write(`${renderToString(<Navigation data={globalData.navigationList} />)}`);
-		res.flush();
-		next();
-	}
-
-    if(promiseStackCenter["navigationList"]["isLoaded"]) {
-        sendHtml();
-    } else {
-        Promise.all(promiseStackCenter["navigationList"]["promiseStack"]).then(res => {
-            sendHtml();
-        })
-    }
-}
+const getNewUsers = (req, res, next) => {
+  res.write(`${renderToString(<NewUsers users={req.users} />)}`);
+  res.flush();
+  next();
+};
 
 /**
- * @function getMainContent This function makes the main content part of the HTML. It internally
+ * @function getTopPerformers This function makes the main content part of the HTML. It internally
  * 					 complies the react component of the same as well. Its flushes the prepared html back to client.
  * @returns {string} Returns the HTML string
  */
-const getMainContent = (req,res,next) => {
-
-    const sendHtml = () => {
-        res.write(`${renderToString(<MainContent data={globalData.mainContent} />)}`);
-		res.flush();
-		next();
-    }
-
-    if(promiseStackCenter["mainContent"]["isLoaded"]) {
-        sendHtml();
-    } else {
-        Promise.all(promiseStackCenter["mainContent"]["promiseStack"]).then(res => {
-            sendHtml();
-        })
-    }
-}
-
+const getTopPerformers = (req, res, next) => {
+  res.write(`${renderToString(<TopPerformers data={req.topPerformers} />)}`);
+  res.flush();
+  next();
+};
 
 /**
  * @function getFooter This function makes the footer part of the HTML. It internally
@@ -93,61 +68,63 @@ const getMainContent = (req,res,next) => {
  * 					   on a window object. Its flushes the prepared html back to client.
  * @returns {string} Returns the HTML string
  */
-const getFooter = (req,res) => {
-	res.write(`${renderToString(<Footer />)}</div>
+const getFooter = (req, res) => {
+  res.write(`${renderToString(<Footer />)}</div>
 		</body>
 		<script>window.dataLayer=${JSON.stringify(globalData)}</script>		
 		<script src="../../bundle.js"></script>
 		</html>`);
-	res.flush();
-	res.end();
-}
+  res.flush();
+  res.end();
+};
 
 /**
- * @function updatePromisCenterObj This function updates the promise stack for the react components.
- * @param {String} component Name of the part for whose data is ready
+ * @function getNewUsersData This function fetches the new avenger recruits.
+ * @param {Object} req request object
+ * @param {Object} res response object
+ * @param {Object} next middleware
  */
-const updatePromisCenterObj = component => {
-    promiseStackCenter[component] = {};
-    promiseStackCenter[component]["isLoaded"] = false;
-    promiseStackCenter[component]["promiseStack"] = [];
-}
+const getNewUsersData = async (req, res, next) => {
+  try {
+    const response = await request.get(`https://reqres.in/api/users`);
+    req.users = response.body.data;
+    globalData.newUsers = response.body.data;
+  } catch (error) {
+    req.users = [];
+    globalData.newUsers = [];
+  }
+  next();
+};
 
 /**
- * @function getPageData This function gathers the data required to build to page but making AJAX calls.
+ * @function getTopPerformersData This function fetches the top performing avengers.
+ * @param {Object} req request object
+ * @param {Object} res response object
+ * @param {Object} next middleware
  */
-const getPageData = (req,res,next) => {
-    let users = [];
-    updatePromisCenterObj("mainContent");
-    promiseStackCenter["mainContent"]["promiseStack"].push(new Promise((resolve,reject)=> {
-		request.get("https://reqres.in/api/users?delay=2").then(response => {
-            globalData.mainContent = response.body.data;
-            promiseStackCenter["mainContent"]["isLoaded"] = true;
-			resolve();
-		});
-    }));
-    updatePromisCenterObj("navigationList");
-	promiseStackCenter["navigationList"]["promiseStack"].push(new Promise((resolve,reject)=> {
-		const getUsers = pageNumber => {
-			request.get(`https://reqres.in/api/users?page=${pageNumber}`).then(res => {
-				if(pageNumber !== 3) {
-					users = [...users,...res.body.data];
-					getUsers(++pageNumber);
-				} else {
-                    globalData.navigationList = users
-                    promiseStackCenter["navigationList"]["isLoaded"] = true;
-                    resolve();
-                    next();
-				}
-			});
-		}
-		getUsers(1);
-    }));
-}
+const getTopPerformersData = async (req, res, next) => {
+  try {
+    const response = await request.get(`https://reqres.in/api/users?delay=2`);
+    req.topPerformers = response.body.data;
+    globalData.topPerformers = response.body.data;
+  } catch (error) {
+    req.topPerformers = [];
+    globalData.topPerformers = [];
+  }
+  next();
+};
 
 /**
  * @function routesForChunking This function performs the task of sending the data in chunks back to the browser
  */
 export const routesForChunking = () => {
-    return ([getHead,getHeader,getPageData,getNavigation,getMainContent,getFooter]);
-}
+  return [
+    getHead,
+    getHeader,
+    getNewUsersData,
+    getNewUsers,
+    getTopPerformersData,
+    getTopPerformers,
+    getFooter,
+  ];
+};

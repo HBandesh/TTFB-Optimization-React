@@ -1,5 +1,5 @@
-import React from 'react';
-import  {hydrate} from "react-dom";
-import App from "./components/app";
+import React from "react";
+import { hydrateRoot } from "react-dom/client";
+import App from "./components/App.jsx";
 
-hydrate(<App data={window.dataLayer}/>, document.getElementById('root'));
+hydrateRoot(document.getElementById("root"), <App data={window.dataLayer} />);
